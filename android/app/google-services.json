@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "387582085828",
+    "project_id": "admin-panel-14c21",
+    "storage_bucket": "admin-panel-14c21.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387582085828:android:ed1db7bd97815cee0c1791",
+        "android_client_info": {
+          "package_name": "com.tht.mydesktopapp.mydesktopapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc1a0z5n4BK3nKg0--WHJUNwmtP1KPlPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
