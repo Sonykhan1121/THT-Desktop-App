@@ -150,5 +150,36 @@ class FirebaseService {
     final docRef = await _firestore.collection('projects').add(project.toMap());
     return docRef;
   }
+  Future<dynamic> saveContactInfo({
+    required String companyName,
+    required String email,
+    required String phone,
+    required String address,
+    String? facebookLink,
+    String? linkedInLink,
+    String? instagramLink,
+    String? website,
+  }) async {
+    try {
+
+      final docRef = await _firestore.collection('about').add({
+        'companyName': companyName,
+        'email': email,
+        'phone': phone,
+        'address': address,
+        'facebookLink': facebookLink ?? '',
+        'linkedInLink': linkedInLink ?? '',
+        'instagramLink': instagramLink ?? '',
+        'website': website ?? '',
+        'timestamp': FieldValue.serverTimestamp(), // Optional: to track creation time
+      });
+
+      print('✅ Contact Info Saved with ID: ${docRef.id}');
+      return docRef;
+    } catch (e) {
+      print('❌ Error saving contact info: $e');
+      rethrow;
+    }
+  }
 
 }

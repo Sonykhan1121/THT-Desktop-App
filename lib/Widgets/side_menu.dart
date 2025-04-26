@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mydesktopapp/pages/achievement_tiles.dart';
+import 'package:mydesktopapp/pages/admincontactinfopage.dart';
 import 'package:mydesktopapp/pages/services_tile.dart';
 import '../pages/profile_tile.dart';
 import '../pages/projects_tile.dart';
@@ -49,7 +50,7 @@ class SideMenu extends StatelessWidget {
             MainListTile(
               image: "assets/contact.png",
               text: 'Contact Us',
-              press: () => onSelectPage(Text('Contact Page')),
+              press: () => onSelectPage(AdminContactInfoPage()),
             ),
           ],
         ),
