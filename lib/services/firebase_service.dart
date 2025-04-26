@@ -1,10 +1,12 @@
 // lib/services/firebase_service.dart
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/service_model.dart';
 import '../models/user_profile.dart';
 
 class FirebaseService {
@@ -57,5 +59,17 @@ class FirebaseService {
       imageUrl: imageUrl,
       pdfUrl: pdfUrl,
     );
+  }
+  Future<dynamic> saveServices({
+    required String title,
+    required String description,
+    required String imageUrl,
+}) async{
+    final docRef = await _firestore.collection('services').add({
+      'title': title,
+      'description': description,
+      'imageUrl' :imageUrl,
+    });
+    return docRef;
   }
 }

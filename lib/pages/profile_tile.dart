@@ -99,6 +99,10 @@ class _ProfilePageState extends State<ProfilePage> {
     } finally {
       _isLoading = false;
 
+      _nameController.clear();
+      _designationController.clear();
+      _image = null;
+      _pdfFile = null;
       if (mounted) {
         setState(() {});
       }
