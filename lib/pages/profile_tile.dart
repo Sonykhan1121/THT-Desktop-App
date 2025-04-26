@@ -1,7 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart'; // For picking images
-import 'package:file_picker/file_picker.dart'; // For picking files
+import 'package:image_picker/image_picker.dart';
+import 'package:mydesktopapp/providers/profileprovider.dart';
+import 'package:provider/provider.dart'; // For picking images
+ // For picking files
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -9,8 +12,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _designationController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _designationController = TextEditingController();
   File? _image;
   File? _pdfFile;
   final ImagePicker _picker = ImagePicker();
@@ -36,101 +39,125 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Profile"),
-        backgroundColor: Colors.teal,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Profile Information",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: "Name",
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _designationController,
-              decoration: InputDecoration(
-                labelText: "Designation",
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: _image != null
-                    ? FileImage(_image!)
-                    : AssetImage("assets/default_profile.png") as ImageProvider,
-                backgroundColor: Colors.grey[200],
-              ),
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                "Upload new photo",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.teal),
-              ),
-            ),
-            SizedBox(height: 20),
-            _buildFilePicker("Upload Image", _pickImage),
-
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Accepted file types: jpg, jpeg, png, gif, heic, heif",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 20,),
-            _buildFilePicker("Upload PDF", _pickPDF),
-            SizedBox(height: 20),
-            Text(
-              _pdfFile != null ? 'Selected PDF: ${_pdfFile!.path.split('/').last}' : 'No PDF file selected',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Save'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+    return Consumer<ProfileProvider>(
+      builder: (BuildContext context, ProfileProvider value, Widget? child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Edit Profile"),
+            backgroundColor: Colors.teal,
+          ),
+          body: value.isLoading?Center(child: CircularProgressIndicator(),):SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Profile Information",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal),
                 ),
-              ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _designationController,
+                  decoration: InputDecoration(
+                    labelText: "Designation",
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: _image != null
+                        ? FileImage(_image!)
+                        : AssetImage("assets/default_profile.png") as ImageProvider,
+                    backgroundColor: Colors.grey[200],
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Upload new photo",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal),
+                  ),
+                ),
+                SizedBox(height: 20),
+                _buildFilePicker("Upload Image", _pickImage),
+
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Accepted file types: jpg, jpeg, png, gif, heic, heif",
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 20,),
+                _buildFilePicker("Upload PDF", _pickPDF),
+                SizedBox(height: 20),
+                Text(
+                  _pdfFile != null ? 'Selected PDF: ${_pdfFile!.path.split('/').last}' : 'No PDF file selected',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed:(){
+                      if (_nameController.text.isEmpty || _designationController.text.isEmpty || _image == null || _image == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please fill all fields...'),
+                            backgroundColor: Colors.redAccent,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+
+                      }
+
+                      value.updateName(_nameController.text);
+                      value.updateDesignation(_designationController.text);
+                      value.setImageFile(_image!);
+                      value.setPdfFile(_pdfFile!);
+                      value.submitProfile();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                    ),
+                    child: Text('Save'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
+
     );
   }
 

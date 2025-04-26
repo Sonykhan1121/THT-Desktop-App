@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Row(
           children: [
             Expanded(
-              flex: 1,
+              flex: 2,
               child: SideMenu(onSelectPage: _updateContent),
             ),
             Expanded(
