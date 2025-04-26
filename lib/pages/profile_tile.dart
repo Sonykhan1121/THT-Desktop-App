@@ -85,8 +85,8 @@ class _ProfilePageState extends State<ProfilePage> {
     print('pdffile: ${_pdfFile?.path}');
     try {
       // Use appropriate folder names for organization
-      final imageUrl = await uploadFileToSupabase(_image!, 'profile_image');
-      final pdfUrl = await uploadFileToSupabase(_pdfFile!, 'cv');
+      final imageUrl = await uploadFileToSupabase(_image!);
+      final pdfUrl = await uploadFileToSupabase(_pdfFile!);
 
       await _firebaseService.saveUserProfile(
         name: _nameController.text.toString(),
@@ -119,23 +119,32 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
   }
-
-  Future<String?> uploadFileToSupabase(File file, String fileName) async {
+  Future<String?> uploadFileToSupabase(File file) async {
     final storage = Supabase.instance.client.storage;
-
-    // Get the file extension dynamically
     final fileExtension = file.path.split('.').last;
-
-    // Generate the new file name with correct extension
-    final fileNameWithExtension = '$fileName.$fileExtension';
-
-    final pathInBucket = 'profile/$fileNameWithExtension'; // Folder inside the bucket
-    final bucketName = 'admin-panel'; // Your bucket name
+    final bucketName = 'admin-panel';
 
     try {
-      final response = await storage
-          .from(bucketName)
-          .upload(pathInBucket, file, fileOptions: const FileOptions(upsert: true));
+      // 1. List existing files in 'services/' folder to count them
+      final existingFiles = await storage.from(bucketName).list(path: 'profile');
+
+      // 2. Count how many service_image_ files already exist
+      final existingCount = existingFiles
+          .where((f) => f.name.startsWith('profile_image_'))
+          .length;
+
+      // 3. Generate next file name
+      final nextIndex = existingCount + 1;
+      final fileName = 'profile_image_$nextIndex.$fileExtension';
+
+      final pathInBucket = 'profile/$fileName';
+
+      // 4. Upload file
+      final response = await storage.from(bucketName).upload(
+        pathInBucket,
+        file,
+        fileOptions: const FileOptions(upsert: false),
+      );
 
       if (response.isNotEmpty) {
         final publicUrl = storage.from(bucketName).getPublicUrl(pathInBucket);
@@ -150,6 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return null;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

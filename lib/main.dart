@@ -4,11 +4,13 @@ import 'package:mydesktopapp/pages/mainscreen.dart';
 import 'package:mydesktopapp/providers/profileprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await Supabase.initialize(
       url: 'https://ptkyjfnahmgfussqqsdu.supabase.co',
