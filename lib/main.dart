@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:mydesktopapp/pages/mainscreen.dart';
 import 'package:mydesktopapp/providers/profileprovider.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await Supabase.initialize(
+      url: 'https://ptkyjfnahmgfussqqsdu.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0a3lqZm5haG1nZnVzc3Fxc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MDIxMTAsImV4cCI6MjA2MTA3ODExMH0.8hFscrvETmL6hJZ0FKZK3ItDDtQOiPy75eYVK99zWIo',
+
+  );
 
 
   runApp(

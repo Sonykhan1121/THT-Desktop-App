@@ -3,39 +3,38 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user_profile.dart';
-//214275103469-0a7ogu325874s43gs3prvm21d572roin.apps.googleusercontent.com
+
 class FirebaseService {
   final _firestore = FirebaseFirestore.instance;
-  final _storage = FirebaseStorage.instance;
 
-  Future<String> uploadFile(File file, String destinationFolder) async {
-    return "path/test1.png";
+
+  Future<String?> uploadFileToSupabase(File file, String fileName) async {
+    final storage = Supabase.instance.client.storage;
+
+    final pathInBucket = 'uploads/$fileName'; // Folder inside the bucket
+    final bucketName = 'Admin-Panel'; // e.g., 'uploads'
+
     try {
-      // Extract just the file name from the full path
-      String fileName = file.path.split('/').last;
+      final response = await storage.from(bucketName).upload(pathInBucket, file);
 
-      // Create a reference with a proper path in Firebase Storage
-      final ref = _storage.ref().child('$destinationFolder/$fileName');
-
-      // Upload the file
-      UploadTask uploadTask = ref.putFile(file);
-
-      // Await upload to complete
-      TaskSnapshot snapshot = await uploadTask;
-
-      // Get the download URL
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } on FirebaseException catch (e) {
-      print("Firebase upload error: ${e.message}");
-      throw Exception("Upload failed: ${e.code} - ${e.message}");
+      if (response.isNotEmpty) {
+        final publicUrl = storage.from(bucketName).getPublicUrl(pathInBucket);
+        print('✅ Upload Success: $publicUrl');
+        return publicUrl;
+      } else {
+        print('❌ Upload failed.');
+        return null;
+      }
     } catch (e) {
-      print("Unknown upload error: $e");
-      throw Exception("Unexpected error during upload");
+      print('Error uploading file: $e');
+      return null;
     }
   }
+
+
 
   Future<UserProfile> saveUserProfile({
     required String name,
