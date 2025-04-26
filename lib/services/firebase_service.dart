@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mydesktopapp/models/personal_information.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/project_model.dart';
 import '../models/service_model.dart';
 import '../models/skills.dart';
 import '../models/user_profile.dart';
@@ -143,4 +144,11 @@ class FirebaseService {
     });
     return docRef;
   }
+  Future<DocumentReference> saveProject({
+    required ProjectModel project,
+  }) async {
+    final docRef = await _firestore.collection('projects').add(project.toMap());
+    return docRef;
+  }
+
 }
