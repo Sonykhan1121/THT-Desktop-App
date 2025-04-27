@@ -8,16 +8,16 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await Supabase.initialize(
-      url: 'https://ptkyjfnahmgfussqqsdu.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0a3lqZm5haG1nZnVzc3Fxc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MDIxMTAsImV4cCI6MjA2MTA3ODExMH0.8hFscrvETmL6hJZ0FKZK3ItDDtQOiPy75eYVK99zWIo',
-
+    url: 'https://ptkyjfnahmgfussqqsdu.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0a3lqZm5haG1nZnVzc3Fxc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1MDIxMTAsImV4cCI6MjA2MTA3ODExMH0.8hFscrvETmL6hJZ0FKZK3ItDDtQOiPy75eYVK99zWIo',
   );
-
 
   runApp(
     MultiProvider(
@@ -44,4 +44,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

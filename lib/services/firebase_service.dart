@@ -1,14 +1,13 @@
 // lib/services/firebase_service.dart
 
-import 'dart:developer';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mydesktopapp/models/personal_information.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/achievement.dart';
 import '../models/project_model.dart';
-import '../models/service_model.dart';
 import '../models/skills.dart';
 import '../models/user_profile.dart';
 import '../models/workexperience.dart';
@@ -87,17 +86,11 @@ class FirebaseService {
         endDate: endDate,
         description: description);
   }
+
   Future<void> saveSkillsToFirebase(List<Skill> skills) async {
     try {
       final skillsCollection = FirebaseFirestore.instance.collection('skills');
 
-      // Optional: Clear old skills if you want to refresh
-      // final snapshot = await skillsCollection.get();
-      // for (var doc in snapshot.docs) {
-      //   await doc.reference.delete();
-      // }
-
-      // Save each skill as a new document
       for (Skill skill in skills) {
         await skillsCollection.add(skill.toMap());
       }
@@ -107,7 +100,6 @@ class FirebaseService {
       print('❌ Error uploading skills: $e');
     }
   }
-
 
   Future<UserProfile> saveUserProfile({
     required String name,
@@ -144,12 +136,14 @@ class FirebaseService {
     });
     return docRef;
   }
+
   Future<DocumentReference> saveProject({
     required ProjectModel project,
   }) async {
     final docRef = await _firestore.collection('projects').add(project.toMap());
     return docRef;
   }
+
   Future<dynamic> saveContactInfo({
     required String companyName,
     required String email,
@@ -161,7 +155,6 @@ class FirebaseService {
     String? website,
   }) async {
     try {
-
       final docRef = await _firestore.collection('about').add({
         'companyName': companyName,
         'email': email,
@@ -171,7 +164,8 @@ class FirebaseService {
         'linkedInLink': linkedInLink ?? '',
         'instagramLink': instagramLink ?? '',
         'website': website ?? '',
-        'timestamp': FieldValue.serverTimestamp(), // Optional: to track creation time
+        'timestamp':
+            FieldValue.serverTimestamp(), // Optional: to track creation time
       });
 
       print('✅ Contact Info Saved with ID: ${docRef.id}');
@@ -182,4 +176,15 @@ class FirebaseService {
     }
   }
 
+  Future<dynamic> addAchievement(Achievement achievement) async {
+    try {
+      final docRef =
+          await _firestore.collection('achievement').add(achievement.toMap());
+
+      return docRef.id;
+    } catch (e) {
+      print('Error uploading achievement: $e');
+      return null;
+    }
+  }
 }
