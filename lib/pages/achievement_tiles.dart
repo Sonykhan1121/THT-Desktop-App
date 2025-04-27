@@ -95,6 +95,8 @@ class _AchievementsPageState extends State<AchievementsPage> {
         });
       }
 
+      clearFields();
+
       // Success message after submission
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -105,6 +107,14 @@ class _AchievementsPageState extends State<AchievementsPage> {
         ),
       );
     }
+  }
+
+  void clearFields() {
+    _titleController.clear();
+    _organizationController.clear();
+    _dateController.clear();
+    _descriptionController.clear();
+    _images.clear();
   }
 
   Future<String?> uploadFileToSupabase(File file) async {
